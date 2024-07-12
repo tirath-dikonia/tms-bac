@@ -1,0 +1,57 @@
+{
+  "name": "GAC",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.ts",
+  "engines": {
+    "node": "18.17.1",
+    "npm": "9.6.7"
+  },
+  "scripts": {
+    "start": "ts-node app.ts",
+    "dev": "nodemon app.ts",
+    "start:server": "NODE_ENV=production node dist/app.js",
+    "start:windows": "set NODE_ENV=production&& ts-node app.ts",
+    "start:ubuntu": "NODE_ENV=production ts-node app.ts",
+    "seed:admin": "ts-node ./src/seeds/admin.ts",
+    "seed:permission": "ts-node ./src/seeds/permissions.ts",
+    "seed:adminjs": "node ./dist/src/seeds/admin.js",
+    "dev:dist": "NODE_ENV=development tsc",
+    "prod:dist": "NODE_ENV=production tsc",
+    "create:coll": "ts-node src/db/migration/script_collection.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.11.25",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
+    "celebrate": "^15.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "eslint-config-prettier": "^9.1.0",
+    "express": "^4.18.3",
+    "express-jwt": "^8.4.1",
+    "express-rate-limit": "^7.2.0",
+    "geoip-lite": "^1.4.10",
+    "handlebars": "^4.7.8",
+    "helmet": "^7.1.0",
+    "http-status": "^1.7.4",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.13",
+    "pdfkit": "^0.15.0"
+  }
+}
