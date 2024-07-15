@@ -42,18 +42,6 @@ const userSchema = new Schema(
             ref: "Role",
             default: null,
         },
-        tasks: [{
-            type: Schema.Types.ObjectId,
-            ref: "Sheet",
-        }],
-        createdProjects: [{
-            type: Schema.Types.ObjectId,
-            ref: "Project",
-        }],
-        assignedProjects: [{
-            type: Schema.Types.ObjectId,
-            ref: "Project",
-        }],
         createdAt: {
             type: Date,
             default: Date.now,

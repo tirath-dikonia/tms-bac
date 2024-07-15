@@ -13,14 +13,6 @@ const roleSchema = new Schema({
         type: Boolean,
         default: true
     },
-    users: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    permissions: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Permission'
-    }]
 },{
     collection: 'roles'
 });
