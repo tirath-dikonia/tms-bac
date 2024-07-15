@@ -8,11 +8,7 @@ const permissionSchema = new Schema({
     },
     desc: {
         type: String,
-    },
-    roles: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Role'
-    }]
+    }
 },{
     collection: "permissions"
 });
