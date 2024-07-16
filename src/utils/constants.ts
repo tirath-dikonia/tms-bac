@@ -16,6 +16,7 @@ const VALIDATOR = "validator";
 const CONTROLLER = "controller";
 const AUTHORIZER = "authorizer";
 enum USER_TYPE {
+    SUPER_ADMIN = "Super Admin",
     ADMIN = "Admin",
     EMPLOYEE = "Employee",
     MANAGER = "Manager",

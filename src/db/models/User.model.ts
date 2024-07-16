@@ -16,7 +16,6 @@ const userSchema = new Schema(
         mobile: {
             type: String,
             default: null,
-            unique: true,
         },
         user_type: {
             type: String,
@@ -66,6 +65,8 @@ const userSchema = new Schema(
     },
     { collection: "users" }
 );
+
+userSchema.index({ mobile: 1 }, { unique: true, partialFilterExpression: { mobile: { $type: "string" } } });
 
 const User = mongoose.model("User", userSchema);
 export { User, userSchema };

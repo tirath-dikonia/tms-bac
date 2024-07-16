@@ -21,7 +21,7 @@ const addUser = {
                     .length(10)
                     .allow("", null),
                 user_type: Joi.string()
-                    .valid(...Object.values(USER_TYPE))
+                    .valid(USER_TYPE.ADMIN, USER_TYPE.EMPLOYEE, USER_TYPE.MANAGER)
                     .required(),
                 role: Joi.string().allow(null, ""),
             })
@@ -30,11 +30,12 @@ const addUser = {
     [CONTROLLER]: async (req, res) => {
         const { name, email, mobile, user_type, role } = req.body;
         const foundUser = await User.findOne({ $or: [{ email }, { mobile }] });
+        // console.log(">>> USER FOUND :", foundUser)
         if (foundUser)
             return sendResponse(
                 res,
                 {},
-                `Client with same ${
+                `User with same ${
                     foundUser.mobile == mobile ? "mobile" : "email"
                 } already exists`,
                 false,
