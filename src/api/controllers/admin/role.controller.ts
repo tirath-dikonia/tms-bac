@@ -24,7 +24,6 @@ const addRole = {
                 false,
                 httpStatus.OK
             );
-console.log(">>> role found : ")
         const newRole = new Role({
             role,
             desc: desc || null,
