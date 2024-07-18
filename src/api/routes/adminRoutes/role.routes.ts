@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.post("/add-role", addRole.validator, catchAsync(addRole.controller));
 
+
 export default router;
