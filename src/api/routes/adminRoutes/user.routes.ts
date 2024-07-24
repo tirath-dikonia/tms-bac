@@ -1,5 +1,5 @@
 import express from "express";
-import { addUser, getUserList } from "../../controllers/admin/user.controller";
+import { addUser, getUserList, getUserTypesDropdown } from "../../controllers/admin/user.controller";
 import { catchAsync } from "../../../utils/catchAsync";
 const router = express.Router();
 
@@ -9,5 +9,6 @@ router.get(
     getUserList.validator,
     catchAsync(getUserList.controller)
 );
+router.get("/get-user-type-dropdown", catchAsync(getUserTypesDropdown.controller));
 
 export default router;

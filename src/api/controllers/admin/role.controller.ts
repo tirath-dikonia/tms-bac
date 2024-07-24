@@ -40,4 +40,26 @@ const addRole = {
     },
 };
 
-export { addRole };
+
+const getRoleDropdown = {
+    [CONTROLLER]: async (req, res) => {
+        const foundRole = await Role.find({}, '_id role');
+        if (!foundRole)
+            return sendResponse(
+                res,
+                {},
+                "Role not found",
+                false,
+                httpStatus.OK
+            );
+        return sendResponse(
+            res,
+            foundRole,
+            "Roles found successfully",
+            true,
+            httpStatus.OK
+        );
+    },
+};
+
+export { addRole, getRoleDropdown };

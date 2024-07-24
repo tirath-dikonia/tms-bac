@@ -139,4 +139,17 @@ const getUserList = {
     },
 };
 
-export { addUser, getUserList };
+
+const getUserTypesDropdown = {
+    [CONTROLLER]: async (req, res) => {
+        return sendResponse(
+            res,
+            Object.values(USER_TYPE),
+            "Roles found successfully",
+            true,
+            httpStatus.OK
+        );
+    },
+};
+
+export { addUser, getUserList,getUserTypesDropdown };
