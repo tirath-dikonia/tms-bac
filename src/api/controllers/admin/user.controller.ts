@@ -77,7 +77,7 @@ const getUserList = {
             .keys({
                 search_term: Joi.string().lowercase().allow("", null),
                 sort_field: Joi.string().trim().allow(null, ""),
-                sort_order: Joi.string().valid("asc", "desc").allow(""),
+                sort_order: Joi.string().valid("asc", "desc").trim().allow(""),
                 per_page: Joi.number().integer().min(1).max(1000).required(),
                 page_number: Joi.number().integer().min(1).max(1000).required(),
             })
@@ -85,9 +85,9 @@ const getUserList = {
     }),
     [CONTROLLER]: async (req, res) => {
         const {
-            search_term,
-            sort_field = "name",
-            sort_order = "asc",
+            search_term = "",
+            sort_field = "createdAt",
+            sort_order = "desc",
             per_page = 10,
             page_number = 1,
         } = req.query;
@@ -102,7 +102,6 @@ const getUserList = {
         // Building sort options
         const sortOptions: any = {};
         sortOptions[sort_field] = sort_order === "asc" ? 1 : -1;
-
         // Pagination options
         const limit = parseInt(per_page as string, 10);
         const skip = (parseInt(page_number as string, 10) - 1) * limit;
@@ -112,13 +111,14 @@ const getUserList = {
             .select([
                 "_id",
                 "name",
+                "email",
                 "user_type",
                 "status",
                 "last_login",
                 "slug",
             ])
             .populate("role", "_id role is_active")
-            .sort(sort_order)
+            .sort(sortOptions)
             .skip(skip)
             .limit(limit);
         // Fetching total count for pagination
