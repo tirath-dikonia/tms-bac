@@ -2,38 +2,38 @@ import { Joi, celebrate } from "celebrate";
 import { CONTROLLER, VALIDATOR } from "../../../utils/constants";
 import { sendResponse } from "../../../utils/sendResponse";
 import httpStatus from "http-status";
-import { Role } from "../../../db/models/Role.model";
+import { TaskType } from "../../../db/models/TaskType.model";
 
-const addRole = {
+const addTaskType = {
     [VALIDATOR]: celebrate({
         body: Joi.object()
             .keys({
-                role: Joi.string().required(),
+                name: Joi.string().required(),
                 desc: Joi.string().allow(null, ""),
             })
             .required(),
     }),
     [CONTROLLER]: async (req, res) => {
-        const { role, desc } = req.body;
-        const foundRole = await Role.findOne({ role });
-        if (foundRole)
+        const { name, desc } = req.body;
+        const foundTaskType = await TaskType.findOne({ name });
+        if (foundTaskType)
             return sendResponse(
                 res,
                 {},
-                "Same role already exists",
+                "Same task type already exists",
                 false,
                 httpStatus.OK
             );
-        const newRole = new Role({
-            role,
+        const newTaskType = new TaskType({
+            name,
             desc: desc || null,
         });
-        const roleSaved = await newRole.save();
+        const taskTypeSaved = await newTaskType.save();
         // const clientSaved = await userRepo.save(newUser);
         return sendResponse(
             res,
-            { role: roleSaved },
-            "New role added successfully",
+            taskTypeSaved,
+            "New task type added successfully",
             true,
             httpStatus.OK
         );
@@ -41,28 +41,7 @@ const addRole = {
 };
 
 
-const getRoleDropdown = {
-    [CONTROLLER]: async (req, res) => {
-        const foundRole = await Role.find({}, '_id role');
-        if (!foundRole)
-            return sendResponse(
-                res,
-                {},
-                "Role not found",
-                false,
-                httpStatus.OK
-            );
-        return sendResponse(
-            res,
-            foundRole,
-            "Roles found successfully",
-            true,
-            httpStatus.OK
-        );
-    },
-};
-
-const getRoleList = {
+const getTaskTypeList = {
     [VALIDATOR]: celebrate({
         query: Joi.object()
             .keys({
@@ -98,26 +77,27 @@ const getRoleList = {
         const skip = (parseInt(page_number as string, 10) - 1) * limit;
 
         // Fetching users
-        const roles = await Role.find(query)
+        const taskTypes = await TaskType.find(query)
             .select([
                 "_id",
-                "role",
+                "name",
+                'desc'
             ])
             .sort(sortOptions)
             .skip(skip)
             .limit(limit);
         // Fetching total count for pagination
-        const totalUsers = await Role.countDocuments(query);
+        const totalTypes = await TaskType.countDocuments(query);
         const result = {
-            roles,
-            total_roles: totalUsers,
+            items: taskTypes,
+            total_items: totalTypes,
             page_number: parseInt(page_number as string, 10),
             per_page: limit,
         };
         return sendResponse(
             res,
             result,
-            "Users list got successfully",
+            "Types list got successfully",
             true,
             httpStatus.OK
         );
@@ -125,4 +105,4 @@ const getRoleList = {
 };
 
 
-export { addRole, getRoleDropdown, getRoleList };
+export {addTaskType, getTaskTypeList};
