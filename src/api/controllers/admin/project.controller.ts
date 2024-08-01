@@ -3,45 +3,51 @@ import { CONTROLLER, VALIDATOR } from "../../../utils/constants";
 import { sendResponse } from "../../../utils/sendResponse";
 import httpStatus from "http-status";
 import { TaskType } from "../../../db/models/TaskType.model";
+import { Project } from "../../../db/models/Project.model";
 
-const addTaskType = {
+const addProject = {
     [VALIDATOR]: celebrate({
         body: Joi.object()
             .keys({
                 name: Joi.string().required(),
                 desc: Joi.string().allow(null, ""),
+                start_date: Joi.date().raw().required(),
+                hours_allocated: Joi.number().integer().min(1).required(),
+                deadline: Joi.date().raw().required(),
             })
             .required(),
     }),
     [CONTROLLER]: async (req, res) => {
-        const { name, desc } = req.body;
-        const foundTaskType = await TaskType.findOne({ name });
-        if (foundTaskType)
+        const { name, desc, start_date, hours_allocated, deadline } = req.body;
+        const foundProject = await Project.findOne({ name });
+        if (foundProject)
             return sendResponse(
                 res,
                 {},
-                "Same task type already exists",
+                "Project with same name already exists",
                 false,
                 httpStatus.OK
             );
-        const newTaskType = new TaskType({
+        const newProject = new Project({
             name,
             desc: desc || null,
+            start_date,
+            hours_allocated,
+            deadline,
         });
-        const taskTypeSaved = await newTaskType.save();
+        const projectSaved = await newProject.save();
         // const clientSaved = await userRepo.save(newUser);
         return sendResponse(
             res,
-            taskTypeSaved,
-            "New task type added successfully",
+            projectSaved,
+            "New project added successfully",
             true,
             httpStatus.OK
         );
     },
 };
 
-
-const getTaskTypeList = {
+const getProjectList = {
     [VALIDATOR]: celebrate({
         query: Joi.object()
             .keys({
@@ -77,32 +83,36 @@ const getTaskTypeList = {
         const skip = (parseInt(page_number as string, 10) - 1) * limit;
 
         // Fetching users
-        const taskTypes = await TaskType.find(query)
+        const allPrj = await Project.find(query)
             .select([
                 "_id",
                 "name",
-                'desc'
+                "desc",
+                "time_spent",
+                "hours_allocated",
+                "start_date",
+                "deadline",
+                "is_active",
             ])
             .sort(sortOptions)
             .skip(skip)
             .limit(limit);
         // Fetching total count for pagination
-        const totalTypes = await TaskType.countDocuments(query);
+        const allPrjCount = await Project.countDocuments(query);
         const result = {
-            items: taskTypes,
-            total_items: totalTypes,
+            items: allPrj,
+            total_items: allPrjCount,
             page_number: parseInt(page_number as string, 10),
             per_page: limit,
         };
         return sendResponse(
             res,
             result,
-            "Types list got successfully",
+            "Project list got successfully",
             true,
             httpStatus.OK
         );
     },
 };
 
-
-export {addTaskType, getTaskTypeList};
+export { addProject, getProjectList };
